@@ -4,20 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/app.ts"
+    "start": "ts-node src/app.ts",
+    "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./ormconfig.ts",
+    "migration:revert": "npx typeorm-ts-node-commonjs migration:revert -d ./ormconfig.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/express": "^4.17.21",
     "@types/node": "^20.14.11",
     "ts-node": "^10.9.2"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mysql2": "^3.10.3",
+    "mysql": "^2.18.1",
     "typeorm": "^0.3.20"
   }
 }

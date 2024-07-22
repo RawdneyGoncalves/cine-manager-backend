@@ -1,5 +1,5 @@
 import express from 'express';
-import MySQLDataSource from './config/ormconfig';
+import MySQLDataSource from '../ormconfig';
 //import userRoutes from './src/routes/userRoutes';
 //import movieRoutes from './src/routes/movieRoutes';
 

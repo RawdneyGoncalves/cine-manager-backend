@@ -19,7 +19,8 @@
     "src/**/*.ts",
     "src/app.mjs",
     "src/**/*.ts",
-    "src/__tests__/**/*.ts"
+    "src/__tests__/**/*.ts",
+    "ormconfig.ts"
   ],
   "exclude": [
     "node_modules"
