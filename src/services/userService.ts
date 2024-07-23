@@ -1,6 +1,5 @@
 import { User } from '../models/userModel';
 import MySQLDataSource from '../../ormconfig';
-import bcrypt from 'bcrypt';
 
 const userRepository = MySQLDataSource.getRepository(User);
 
@@ -23,6 +22,9 @@ export class UserService {
     return user ?? undefined;
   }
 
+  static async getAllUsers(): Promise<User[]> {
+    return userRepository.find();
+  }
 
   static async updateUser(id: number, name: string, email: string, password: string): Promise<User | undefined> {
     const user = await userRepository.findOneBy({ id });

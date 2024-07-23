@@ -1,7 +1,7 @@
 import { getRepository } from "typeorm";
-import { Film } from "../models/Film";
-import { User } from "../models/User";
-import { Package } from "../models/Package";
+import { Film } from "../models/film";
+import { User } from "../models/userModel";
+import { Package } from "../models/package";
 
 interface PaginationOptions {
     page: number;

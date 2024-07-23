@@ -2,6 +2,7 @@
   "compilerOptions": {
     "types": [
       "node",
+      "jsonwebtoken",
     ],
     "target": "es6",
     "module": "commonjs",

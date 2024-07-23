@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { UserService } from './userService';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret';
 
