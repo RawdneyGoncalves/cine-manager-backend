@@ -1,6 +1,7 @@
 import express from 'express';
 import MySQLDataSource from '../ormconfig';
-//import userRoutes from './src/routes/userRoutes';
+import userRoutes from './routes/userRoutes';
+import filmRoutes from './routes/filmRoutes';
 //import movieRoutes from './src/routes/movieRoutes';
 
 const app = express();
@@ -8,7 +9,8 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 
-//app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api', filmRoutes);
 //app.use('/api/movies', movieRoutes);
 
 MySQLDataSource.initialize()

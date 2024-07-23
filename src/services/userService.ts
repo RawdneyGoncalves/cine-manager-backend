@@ -1,6 +1,6 @@
 import { User } from '../models/userModel';
-import MySQLDataSource from '../ormconfig';
-import bcrypt from 'bcryptjs';
+import MySQLDataSource from '../../ormconfig';
+import bcrypt from 'bcrypt';
 
 const userRepository = MySQLDataSource.getRepository(User);
 
@@ -14,12 +14,15 @@ export class UserService {
   }
 
   static async getUserByEmail(email: string): Promise<User | undefined> {
-    return userRepository.findOneBy({ email });
+    const user = await userRepository.findOneBy({ email });
+    return user ?? undefined;
   }
 
   static async getUserById(id: number): Promise<User | undefined> {
-    return userRepository.findOneBy({ id });
+    const user = await userRepository.findOneBy({ id });
+    return user ?? undefined;
   }
+
 
   static async updateUser(id: number, name: string, email: string, password: string): Promise<User | undefined> {
     const user = await userRepository.findOneBy({ id });
