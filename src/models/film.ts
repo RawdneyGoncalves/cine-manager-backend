@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Theme } from './theme';
+import { WatchedFilm } from './WatchedFilm';
 
 @Entity('films')
 export class Film {
@@ -20,4 +21,7 @@ export class Film {
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     updatedAt!: Date;
+
+    @OneToMany(() => WatchedFilm, watchedFilm => watchedFilm.film)
+    watchedFilms: WatchedFilm[];
 }

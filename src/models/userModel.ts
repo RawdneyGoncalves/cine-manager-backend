@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import bcrypt from 'bcrypt';
-
+import { WatchedFilm } from './WatchedFilm.ts';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
@@ -24,4 +24,8 @@ export class User {
   async hashPassword(password: string): Promise<void> {
     this.password = await bcrypt.hash(password, 10);
   }
+
+  @OneToMany(() => WatchedFilm, watchedFilm => watchedFilm.user)
+  watchedFilms: WatchedFilm[];
+
 }

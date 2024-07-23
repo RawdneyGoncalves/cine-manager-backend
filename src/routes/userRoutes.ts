@@ -1,13 +1,16 @@
 import { Router } from 'express';
-import { UserController } from '../controllers/UserController';
+import { UserController } from '../controllers/userController';
+import { PasswordResetController } from '../controllers/passwordResetController';
 
 const router = Router();
 
-router.get('/', UserController.getAllUsers);
+router.post('/register', UserController.register);
+router.post('/login', UserController.login);
 router.get('/:id', UserController.getUserById);
-router.post('/', UserController.createUser);
 router.put('/:id', UserController.updateUser);
 router.delete('/:id', UserController.deleteUser);
-router.post('/login', UserController.login);
+
+router.post('/password-reset', PasswordResetController.initiatePasswordReset);
+router.post('/password-reset/:token', PasswordResetController.resetPassword);
 
 export default router;

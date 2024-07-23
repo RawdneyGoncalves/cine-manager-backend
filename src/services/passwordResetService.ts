@@ -1,18 +1,26 @@
+import nodemailer from 'nodemailer';
 import { UserService } from './userService';
 import jwt from 'jsonwebtoken';
 
-const RESET_PASSWORD_SECRET = process.env.RESET_PASSWORD_SECRET || 'your_reset_password_secret';
-const RESET_TOKEN_EXPIRATION = '1h';
+const DEFAULT_RESET_TOKEN_EXPIRATION = '1h';
+
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS,
+    },
+});
 
 export class PasswordResetService {
-    static generateResetToken(userId: number): string {
-        const token = jwt.sign({ userId }, RESET_PASSWORD_SECRET, { expiresIn: RESET_TOKEN_EXPIRATION });
+    static generateResetToken(userId: number, secret: string, expiresIn: string = DEFAULT_RESET_TOKEN_EXPIRATION): string {
+        const token = jwt.sign({ userId }, secret, { expiresIn });
         return token;
     }
 
-    static verifyResetToken(token: string): any {
+    static verifyResetToken(token: string, secret: string): any {
         try {
-            const decoded = jwt.verify(token, RESET_PASSWORD_SECRET);
+            const decoded = jwt.verify(token, secret);
             return decoded;
         } catch (err) {
             return null;
@@ -20,24 +28,31 @@ export class PasswordResetService {
     }
 
     static async sendResetEmail(user: any, resetToken: string): Promise<void> {
-        // Simular envio de email
         const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
-        console.log(`Send email to ${user.email} with reset URL: ${resetUrl}`);
-        // Aqui você implementaria o envio real de e-mails
+        
+        const mailOptions = {
+            from: process.env.EMAIL_USER, 
+            to: user.email,
+            subject: 'Password Reset Request',
+            text: `You requested a password reset. Please click the following link to reset your password: ${resetUrl}`,
+            html: `<p>You requested a password reset. Please click the following link to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
+        };
+
+        await transporter.sendMail(mailOptions);
     }
 
-    static async initiatePasswordReset(email: string): Promise<boolean> {
+    static async initiatePasswordReset(email: string, secret: string): Promise<boolean> {
         const user = await UserService.getUserByEmail(email);
         if (!user) {
             throw new Error('User not found');
         }
-        const resetToken = this.generateResetToken(user.id);
+        const resetToken = this.generateResetToken(user.id, secret);
         await this.sendResetEmail(user, resetToken);
         return true;
     }
 
-    static async resetPassword(token: string, newPassword: string): Promise<boolean> {
-        const decoded = this.verifyResetToken(token);
+    static async resetPassword(token: string, newPassword: string, secret: string): Promise<boolean> {
+        const decoded = this.verifyResetToken(token, secret);
         if (!decoded) {
             throw new Error('Invalid or expired token');
         }
