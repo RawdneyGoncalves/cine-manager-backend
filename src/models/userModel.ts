@@ -1,39 +1,27 @@
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import bcrypt from 'bcrypt';
 
-export class UserRepository {
-  private users: User[] = [];
-  private nextId: number = 1;
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-  createUser(user: User): User {
-    const newUser = { ...user, id: this.nextId++ };
-    this.users.push(newUser);
-    return newUser;
-  }
+  @Column({ type: 'varchar', length: 255 })
+  name!: string;
 
-  getUserById(id: number): User | undefined {
-    return this.users.find(user => user.id === id);
-  }
+  @Column({ type: 'varchar', length: 255, unique: true })
+  email!: string;
 
-  getAllUsers(): User[] {
-    return this.users;
-  }
+  @Column({ type: 'varchar', length: 255 })
+  password!: string;
 
-  updateUser(id: number, updatedUser: User): User | undefined {
-    const index = this.users.findIndex(user => user.id === id);
-    if (index !== -1) {
-      this.users[index] = { ...updatedUser, id };
-      return this.users[index];
-    }
-    return undefined;
-  }
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt!: Date;
 
-  deleteUser(id: number): boolean {
-    const initialLength = this.users.length;
-    this.users = this.users.filter(user => user.id !== id);
-    return this.users.length !== initialLength;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt!: Date;
+
+  async hashPassword(password: string): Promise<void> {
+    this.password = await bcrypt.hash(password, 10);
   }
 }
