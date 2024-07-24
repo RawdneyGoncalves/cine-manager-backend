@@ -16,14 +16,12 @@ app.use('/api/watched-films', watchedFilmeRoutes);
 MySQLDataSource.initialize()
   .then(() => {
     console.log('MySQL connected');
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
   })
   .catch((error) => {
     console.error('MySQL connection error:', error);
-    process.exit(1);
   });
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
 
 export default app;

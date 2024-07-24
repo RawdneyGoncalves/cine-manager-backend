@@ -3,7 +3,8 @@ import { FilmController } from '../controllers/filmController';
 
 const router = Router();
 
-router.get('/films/:id', FilmController.getFilmsForUser);
-router.get('/films', FilmController.listAllFilms);
+router.get('/:id', FilmController.getFilms);
+router.get('/theme/:themeId', FilmController.getFilmsByTheme);
+router.get('/', FilmController.getAllFilms);
 
 export default router;
