@@ -10,7 +10,7 @@ export class PasswordResetController {
             const result = await PasswordResetService.initiatePasswordReset(email, RESET_PASSWORD_SECRET);
             res.status(200).json({ message: 'Password reset email sent', success: result });
         } catch (error) {
-            res.status(500).json({ message: error}); 
+            res.status(500).json({ message: 'An unexpected error occurred while initiating password reset. Please try again later.' });
         }
     }
 
@@ -21,7 +21,7 @@ export class PasswordResetController {
             const result = await PasswordResetService.resetPassword(token, newPassword, RESET_PASSWORD_SECRET);
             res.status(200).json({ message: 'Password reset successfully', success: result });
         } catch (error) {
-            res.status(500).json({ message: error}); 
+            res.status(500).json({ message: 'An unexpected error occurred while resetting the password. Please try again later.' });
         }
     }
 }

@@ -8,7 +8,7 @@ export class UserController {
       const users = await UserService.getAllUsers();
       res.json(users);
     } catch (error) {
-      res.status(500).json({ message: error });
+      res.status(500).json({ message: 'An unexpected error occurred while fetching all users. Please try again later.' });
     }
   }
 
@@ -17,11 +17,11 @@ export class UserController {
     try {
       const user = await UserService.getUserById(userId);
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'User not found.' });
       }
       res.json(user);
     } catch (error) {
-      res.status(500).json({ message: error });
+      res.status(500).json({ message: 'An unexpected error occurred while updating the user. Please try again later.' });
     }
   }
 
@@ -45,7 +45,7 @@ export class UserController {
       }
       res.json(updatedUser);
     } catch (error) {
-      res.status(500).json({ message: error });
+      res.status(500).json({ message: 'An unexpected error occurred while updating the user. Please try again later.' });
     }
   }
 
@@ -58,7 +58,7 @@ export class UserController {
       }
       res.status(204).end();
     } catch (error) {
-      res.status(500).json({ message: error });
+      res.status(500).json({ message: 'An unexpected error occurred while deleting the user. Please try again later.' });
     }
   }
 
@@ -71,7 +71,7 @@ export class UserController {
       }
       res.json({ token });
     } catch (error) {
-      res.status(500).json({ message: error });
+      res.status(500).json({ message: 'An unexpected error occurred during login. Please try again later.' });
     }
   }
 }

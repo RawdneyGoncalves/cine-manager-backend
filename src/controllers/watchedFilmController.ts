@@ -15,7 +15,7 @@ export class WatchedFilmController {
             } else if (error === 'Film already marked as watched') {
                 return res.status(400).json({ message: error });
             } else {
-                return res.status(500).json({ message: 'Internal Server Error' });
+                return res.status(500).json({ message: 'An unexpected error occurred while marking the film as watched. Please try again later.' });
             }
         }
     }
@@ -31,7 +31,7 @@ export class WatchedFilmController {
             if (error === 'Watched Film entry not found') {
                 return res.status(404).json({ message: error });
             } else {
-                return res.status(500).json({ message: 'Internal Server Error' });
+                return res.status(500).json({ message: 'An unexpected error occurred while unmarking the film as watched. Please try again later.' });
             }
         }
     }
@@ -47,7 +47,7 @@ export class WatchedFilmController {
             if (error === 'No watched films found for this user') {
                 return res.status(404).json({ message: error });
             } else {
-                return res.status(500).json({ message: 'Internal Server Error' });
+                return res.status(500).json({ message: 'An unexpected error occurred while generating the watched films report. Please try again later.' });
             }
         }
     }

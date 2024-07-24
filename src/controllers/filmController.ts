@@ -12,8 +12,7 @@ export class FilmController {
             const films = await FilmService.getFilmsForUser(userId, themeIds, { page, pageSize });
             res.json(films);
         } catch (error) {
-            console.error("Error in getFilms:", error);
-            res.status(500).json({ message: "Failed to retrieve films", error });
+            res.status(500).json({ message: 'An unexpected error occurred while retrieving films. Please try again later.' });
         }
     }
 
@@ -26,8 +25,7 @@ export class FilmController {
             const films = await FilmService.getFilmsByTheme(themeId, { page, pageSize });
             res.json(films);
         } catch (error) {
-            console.error("Error in getFilmsByTheme:", error);
-            res.status(500).json({ message: "Failed to retrieve films by theme", error });
+            res.status(500).json({ message: 'An unexpected error occurred while retrieving films. Please try again later.' });
         }
     }
 
@@ -39,8 +37,7 @@ export class FilmController {
             const films = await FilmService.getAllFilms({ page, pageSize });
             res.json(films);
         } catch (error) {
-            console.error("Error in getAllFilms:", error);
-            res.status(500).json({ message: "Failed to retrieve all films", error });
+            res.status(500).json({ message: 'An unexpected error occurred while retrieving films. Please try again later.' });
         }
     }
 }
