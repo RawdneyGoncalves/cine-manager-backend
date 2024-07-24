@@ -1,8 +1,4 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { WatchedFilm } from '../models/WatchedFilm';
-import { Film } from '../models/film';
-import { User } from '../models/userModel';
 import { WatchedFilmService } from '../services/watchedFilmService';
 
 export class WatchedFilmController {
