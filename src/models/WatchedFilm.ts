@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 import { User } from './userModel';
 import { Film } from './film';
 
@@ -13,7 +13,7 @@ export class WatchedFilm {
     @ManyToOne(() => Film, film => film.watchedFilms)
     film!: Film;
 
-    @CreateDateColumn()
+    @Column()
     watchedAt!: Date;
 
     constructor(user: User, film: Film) {

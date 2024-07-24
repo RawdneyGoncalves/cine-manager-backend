@@ -4,6 +4,7 @@ import { PasswordResetController } from '../controllers/passwordResetController'
 
 const router = Router();
 
+router.get('/', UserController.getAllUsers);
 router.post('/register', UserController.createUser);
 router.post('/login', UserController.login);
 router.get('/:id', UserController.getUserById);

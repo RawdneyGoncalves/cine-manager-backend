@@ -34,4 +34,15 @@ export class FilmService {
 
         return films;
     }
+
+    static async getAllFilms(pagination: PaginationOptions) {
+        const filmRepository = getRepository(Film);
+
+        const films = await filmRepository.createQueryBuilder('film')
+            .skip((pagination.page - 1) * pagination.pageSize)
+            .take(pagination.pageSize)
+            .getMany();
+
+        return films;
+    }
 }

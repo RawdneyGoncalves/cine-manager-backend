@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { WatchedFilm } from '../models/WatchedFilm';
-import { Film } from '../models/film';
+import { Film } from '../models/film'
 import { User } from '../models/userModel';
 
 export class WatchedFilmController {
@@ -12,17 +12,18 @@ export class WatchedFilmController {
         const userRepo = getRepository(User);
         const watchedFilmRepo = getRepository(WatchedFilm);
 
-        const user = await userRepo.findOne(userId);
-        const film = await filmRepo.findOne(filmId);
+        const user = await userRepo.findOne({ where: { id: Number(userId) } });
+        const film = await filmRepo.findOne({ where: { id: Number(filmId) } });
 
         if (!user || !film) {
             return res.status(404).json({ message: 'User or Film not found' });
         }
 
-        const watchedFilm = new WatchedFilm();
-        watchedFilm.user = user;
-        watchedFilm.film = film;
-        watchedFilm.watchedAt = new Date();
+        const watchedFilm = watchedFilmRepo.create({
+            user,
+            film,
+            watchedAt: new Date()
+        });
 
         await watchedFilmRepo.save(watchedFilm);
 
@@ -34,7 +35,7 @@ export class WatchedFilmController {
 
         const watchedFilmRepo = getRepository(WatchedFilm);
 
-        const watchedFilm = await watchedFilmRepo.findOne({ where: { user: userId, film: filmId } });
+        const watchedFilm = await watchedFilmRepo.findOne({ where: { user: { id: Number(userId) }, film: { id: Number(filmId) } } });
 
         if (!watchedFilm) {
             return res.status(404).json({ message: 'Watched Film not found' });
@@ -51,30 +52,42 @@ export class WatchedFilmController {
         const watchedFilmRepo = getRepository(WatchedFilm);
         const filmRepo = getRepository(Film);
 
-        const watchedFilms = await watchedFilmRepo.find({ where: { user: userId }, relations: ['film'] });
+        const userIdNumber = Number(userId);
+
+        const watchedFilms = await watchedFilmRepo.find({ where: { user: { id: userIdNumber } }, relations: ['film', 'film.theme'] });
 
         if (watchedFilms.length === 0) {
             return res.status(404).json({ message: 'No watched films found for this user' });
         }
 
         const totalFilmsWatched = watchedFilms.length;
-        const mostWatchedTheme = watchedFilms.reduce((acc, curr) => {
-            acc[curr.film.theme] = (acc[curr.film.theme] || 0) + 1;
-            return acc;
-        }, {});
 
-        const mostWatchedThemeId = Object.keys(mostWatchedTheme).reduce((a, b) => (mostWatchedTheme[a] > mostWatchedTheme[b] ? a : b));
-        const mostWatchedThemeName = await filmRepo.findOne({ where: { theme: mostWatchedThemeId } });
+        const themeWatchCounts: { [key: number]: number } = watchedFilms.reduce((acc: { [key: number]: number }, curr) => {
+            const themeId = curr.film.theme.id;
+            acc[themeId] = (acc[themeId] || 0) + 1;
+            return acc;
+        }, {} as { [key: number]: number });
+
+        const mostWatchedThemeId = Object.keys(themeWatchCounts)
+            .map(key => Number(key))
+            .reduce((a, b) => themeWatchCounts[a] > themeWatchCounts[b] ? a : b);
+
+        const mostWatchedThemeIdNumber = mostWatchedThemeId;
+
+        const mostWatchedTheme = await filmRepo.findOne({
+            where: { theme: { id: mostWatchedThemeIdNumber } },
+            relations: ['theme']
+        });
 
         const lastFilmWatched = watchedFilms.reduce((a, b) => (a.watchedAt > b.watchedAt ? a : b));
 
         res.status(200).json({
-            userId,
+            userId: userIdNumber,
             totalFilmsWatched,
             mostWatchedTheme: {
-                themeId: mostWatchedThemeId,
-                themeName: mostWatchedThemeName?.theme,
-                totalFilmsWatched: mostWatchedTheme[mostWatchedThemeId],
+                themeId: mostWatchedThemeIdNumber,
+                themeName: mostWatchedTheme?.theme?.name || 'Unknown',
+                totalFilmsWatched: themeWatchCounts[mostWatchedThemeIdNumber],
             },
             lastFilmWatched: {
                 movieId: lastFilmWatched.film.id,

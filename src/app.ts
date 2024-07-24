@@ -3,17 +3,15 @@ import MySQLDataSource from '../ormconfig';
 import userRoutes from './routes/userRoutes';
 import filmRoutes from './routes/filmRoutes';
 import watchedFilmeRoutes from './routes/watchedFilmRoutes';
-//import movieRoutes from './src/routes/movieRoutes';
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
-app.use('/api', filmRoutes);
-app.use('/api', watchedFilmeRoutes);
-//app.use('/api/movies', movieRoutes);
+app.use('/api/films', filmRoutes);
+app.use('/api/watched-films', watchedFilmeRoutes);
 
 MySQLDataSource.initialize()
   .then(() => {
@@ -21,11 +19,11 @@ MySQLDataSource.initialize()
   })
   .catch((error) => {
     console.error('MySQL connection error:', error);
+    process.exit(1);
   });
 
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 export default app;
