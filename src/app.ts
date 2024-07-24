@@ -1,9 +1,9 @@
 import express from 'express';
-import MySQLDataSource from './config/ormconfig';
+import MySQLDataSource from '../ormconfig';
 import userRoutes from './routes/userRoutes';
 import filmRoutes from './routes/filmRoutes';
-import watchedFilmRoutes from './routes/watchedFilmRoutes'; 
-import { connectToMongoDB } from './config/mongoConfig'; 
+import watchedFilmeRoutes from './routes/watchedFilmRoutes';
+//import movieRoutes from './src/routes/movieRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -11,8 +11,9 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
-app.use('/api/films', filmRoutes);
-app.use('/api/watched-films', watchedFilmRoutes); 
+app.use('/api', filmRoutes);
+app.use('/api', watchedFilmeRoutes);
+//app.use('/api/movies', movieRoutes);
 
 MySQLDataSource.initialize()
   .then(() => {
@@ -23,10 +24,8 @@ MySQLDataSource.initialize()
   });
 
 
-connectToMongoDB();
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
 
 export default app;

@@ -1,18 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 import { User } from './userModel';
 import { Film } from './film';
 
 @Entity()
 export class WatchedFilm {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @ManyToOne(() => User, user => user.watchedFilms)
-    user: User;
+    user!: User;
 
     @ManyToOne(() => Film, film => film.watchedFilms)
-    film: Film;
+    film!: Film;
 
-    @Column()
-    watchedAt: Date;
+    @CreateDateColumn()
+    watchedAt!: Date;
+
+    constructor(user: User, film: Film) {
+        this.user = user;
+        this.film = film;
+        this.watchedAt = new Date();
+    }
 }

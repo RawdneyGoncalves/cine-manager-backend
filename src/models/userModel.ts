@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import bcrypt from 'bcrypt';
-import { WatchedFilm } from './WatchedFilm.ts';
+import { WatchedFilm } from './WatchedFilm';
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
@@ -26,6 +27,6 @@ export class User {
   }
 
   @OneToMany(() => WatchedFilm, watchedFilm => watchedFilm.user)
-  watchedFilms: WatchedFilm[];
+  watchedFilms!: WatchedFilm[];
 
 }

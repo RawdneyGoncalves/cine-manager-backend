@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { UserController } from '../controllers/userController';
+import { UserController } from '../controllers/UserController';
 import { PasswordResetController } from '../controllers/passwordResetController';
 
 const router = Router();
 
-router.post('/register', UserController.register);
+router.post('/register', UserController.createUser);
 router.post('/login', UserController.login);
 router.get('/:id', UserController.getUserById);
 router.put('/:id', UserController.updateUser);

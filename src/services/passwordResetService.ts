@@ -1,14 +1,15 @@
 import nodemailer from 'nodemailer';
 import { UserService } from './userService';
 import jwt from 'jsonwebtoken';
+import { getMaxListeners } from 'events';
 
 const DEFAULT_RESET_TOKEN_EXPIRATION = '1h';
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: process.env.EMAIL_USER, 
-        pass: process.env.EMAIL_PASS,
+        user: 'mendesrawdney@gmail.com',
+        pass: 'rawdney29042002159357789963321147789',
     },
 });
 
@@ -29,9 +30,9 @@ export class PasswordResetService {
 
     static async sendResetEmail(user: any, resetToken: string): Promise<void> {
         const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
-        
+
         const mailOptions = {
-            from: process.env.EMAIL_USER, 
+            from: process.env.EMAIL_USER,
             to: user.email,
             subject: 'Password Reset Request',
             text: `You requested a password reset. Please click the following link to reset your password: ${resetUrl}`,

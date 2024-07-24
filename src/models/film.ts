@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Theme } from './theme';
 import { WatchedFilm } from './WatchedFilm';
 
@@ -23,5 +23,5 @@ export class Film {
     updatedAt!: Date;
 
     @OneToMany(() => WatchedFilm, watchedFilm => watchedFilm.film)
-    watchedFilms: WatchedFilm[];
+    watchedFilms!: WatchedFilm[];
 }

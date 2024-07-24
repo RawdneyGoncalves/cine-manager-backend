@@ -1,4 +1,4 @@
-import jwt fro';
+import * as jwt from "jsonwebtoken";
 import { UserService } from './userService';
 import bcrypt from 'bcrypt';
 
